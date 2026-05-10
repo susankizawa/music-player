@@ -1,0 +1,144 @@
+ed2 programação avançado:
+- aceita arquivos de som, leia arquivos de audio
+- leia uma pasta e acessar as músicas dentro dele
+- deve oferecer a possibilidade de montar playlists
+- ter uma interface
+- biblioteca de músicas global
+- busca e filtro de músicas
+
+modules:
+- app
+   - save config
+   - load config
+- music player
+   - play
+   - pause
+   - stop
+   - skip
+   - previous
+   - control volume
+   - get song info (music name, current duration, total duration, artist, album, genre, etc)
+   - support common audio file formats (mp3, wav, ogg, etc)
+- playlist manager
+   - create playlist
+   - edit playlist
+   - delete playlist
+   - add song
+   - remove song
+   - sort songs
+- global library manager (add new music or delete old music, doesn't necessarily deal with actually playing the music files, would also deal with being able to search up and filter music)
+   - add music file
+   - delete music file
+   - sort songs (by artist, album, genre, etc)
+   - search songs
+   - filter songs
+   - save global library state (could act as backup too maybe?)
+   - load global library state (could act as backup too maybe?)
+   - get music history
+
+models:
+- song
+   - name
+   - duration
+   - album
+   - artist
+   - genre
+
+config:
+- audio output
+- playlist setting (shuffle, autoplay next song, etc)
+- volume
+
+pesquisa e setup:
+
+rough idea of used architecture/file organization:
+- music player (plays music)
+- playlist manager (creation, manipulation and deletion of playlists)
+- global library manager (add new music or delete old music, doesn't necessarily deal with actually playing the music files, would also deal with being able to search up and filter music)
+
+what can i use to play audio?:
+libraries that handle audio:
+- sdl3
+- pygame
+- librosa
+- pythonvlc
+- wave
+- qt multimedia
+- qsoundeffect
+
+what can i use to render the graphical interface?
+libraries that handle graphical rendering:
+- pygame gui
+- thorpy
+- pygwidgets
+- tkinter
+- pyside6
+- pyqt6
+- streamlit
+- flet
+- nicegui
+- kivy
+- dear pygui
+- wxpython
+- beeware
+
+opções mais promissoras:
+- qt (pyside6 ou pyqt6)
+- qmultimedia
+
+what can i use to handle files?
+- pathlib
+- shutil
+
+bibliotecas pra extrair metadados:
+- mutagen
+- tinytag
+
+rough idea of classes i'm gonna need to create?
+- MusicPlayer
+- Song
+- Playlist
+- Album (a variation of playlist maybe?)
+- Library
+- FileHandler
+
+what can i use for data persistence?
+- SQLite
+- JSON files
+
+extra:
+- Priority List? (could be used for a recommendation system or for playing music when the user hasn't set a specific playlist to play, like how spotify plays random songs for you when your playlist is already done)
+- Artist
+- User (if it's gonna have multiple users)
+
+what design patterns can i use and where?
+
+maybe do:
+- src
+   - app
+      - main
+   - features
+      - music_player
+         - actions
+      - library_manager
+         - actions
+      - playlist_manager
+         - actions
+- run shell script
+
+song object:
+- title
+- artist
+- album
+- date
+- genre
+- duration
+- file_url/file_path
+
+The QMediaPlayer class is a high level media playback class. It can be used to playback such content as songs, movies and internet radio.
+
+player.metaDataChanged.connect(handle_metadata_change) could be used to handle when songs change, but would need to wait for the song to load first.
+
+Need to handle if mp3 metadata tags are empty
+
+used to generate the gitignore: https://www.toptal.com/developers/gitignore
