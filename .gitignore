@@ -194,4 +194,8 @@ pyrightconfig.json
 
 /music/*
 
+/src (old)
+VERTICAL_SLICE_PLACEHOLDERS.md
+WORKLOG.md
+
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode

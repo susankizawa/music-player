@@ -1,2 +1,2 @@
 .venv\Scripts\Activate.ps1
-python -m src.app.main
+python -m src.main

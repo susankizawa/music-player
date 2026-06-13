@@ -11,20 +11,20 @@ modules:
    - save config
    - load config
 - music player
-   - play
-   - pause
-   - stop
-   - skip
-   - previous
-   - control volume
+   - play ok
+   - pause ok
+   - stop ok
+   - skip (needs playlist)
+   - previous (needs playlist)
+   - control volume ok
    - get song info (music name, current duration, total duration, artist, album, genre, etc)
    - support common audio file formats (mp3, wav, ogg, etc)
 - playlist manager
    - create playlist
    - edit playlist
    - delete playlist
-   - add song
-   - remove song
+   - add song ok
+   - remove song ok
    - sort songs
 - global library manager (add new music or delete old music, doesn't necessarily deal with actually playing the music files, would also deal with being able to search up and filter music)
    - add music file
@@ -135,6 +135,11 @@ song object:
 - duration
 - file_url/file_path
 
+things that could be singletons:
+- global library
+- QMediaPlayer
+- QAudioOutput
+
 The QMediaPlayer class is a high level media playback class. It can be used to playback such content as songs, movies and internet radio.
 
 player.metaDataChanged.connect(handle_metadata_change) could be used to handle when songs change, but would need to wait for the song to load first.
@@ -142,3 +147,40 @@ player.metaDataChanged.connect(handle_metadata_change) could be used to handle w
 Need to handle if mp3 metadata tags are empty
 
 used to generate the gitignore: https://www.toptal.com/developers/gitignore
+
+mutagen docs: https://mutagen.readthedocs.io/en/latest/user/gettingstarted.html
+
+metadata for songs might be a pain in the ass to map
+
+links that might help for sorting out metadata tags:
+- https://stackoverflow.com/questions/19193551/using-mutagen-to-process-all-accepted-file-types
+- https://wiki.hydrogenaudio.org/index.php?title=Hydrogenaudio_Knowledgebase:Main_Page
+- https://picard-docs.musicbrainz.org/en/latest/appendices/tag_mapping.html#redirected
+
+so you have a file, that file has an audiostream as well as metadata tags, from my understanding metadata tags for the mp3 format aren't standardized so everyone can have their own format and the metadata tags for these files don't have a fixed structure which makes it hard to map them to an object. when mapping the song data to an object in your app, since the data is unstructure and there's diff types of audio files (not considering audio files that straight up didn't even bother adding metadata like maybe unofficial mp3 files) i feel like you'd want to keep the mapping part separate from the rest of the code for the object, like how when you take data from your database you want to filter out the data that won't be necessary and structure it the way you want to deal with the object. how do web scrapers structure the data they scrape of the internet? cuz i would imagine that's even more messy?
+
+music player python tutorial: https://www.youtube.com/watch?v=j8fj3y-wg3Y
+
+- duration para tempo total
+- position para tempo atual
+- considerar usar pathlib
+- root and music could be global variables, maybe in a singleton?
+
+library feature:
+- should allow you to add/remove songs
+- should allow you to search and filter songs
+- metadata parser should handle validating files and extracting metadata from a file
+
+logic for loading songs:
+- when starting up the app, all songs are loaded from the music folder
+- does that mean i don't have data persistence yet? or the closest thing would be technically speaking the data is persisting through the music files, but i assume this isn't how you're supposed to actually do it?
+- when adding a new song, user will add it either by dragging and dropping or with your typical file dialog box, user might select one or more song files that may or may not be correct, they're validated and then copied to the music folder and added to the list of songs of the global library (the song objects allow the app to have access to stuff like metadata and the file path so the QtMediaPlayer can play the audio file)
+- when removing a song, user is asked for confirmation, then we can either delete it from the folder or soft delete it, but the actual file still exists, maybe there's also a trashcan so the user can actually delete the deleted songs to open up storage space?
+- names of the methods suggested by the ai are bugging me, i feel like there could be a better differentiation between load_songs and import_files, also something's bugging me about validate_import, either way, this is low priority, i should really focus on coding rather than getting the names perfect
+- code-wise, i'm imagining load_songs runs on startup? maybe i call it on the init of App? or i could call it on the init of Library. then adding in a new song as in from a new file the user wants to add should be called when the user presses a button on the ui, then the code should validate the file, if it's valid, it should copy the file and add it to the music folder, then it should create a song object with the metadata of that that file as well as the file path and add it to the global library, then idk let the user know the process was successful and update the ui?
+- Library should be a singleton
+- load_songs doesnt validate the files
+
+notes:
+- music player stops when music reaches the end, music doesn't start when switching music
+- maybe consider using a local database?
