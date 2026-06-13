@@ -6,9 +6,9 @@ import shutil
 from pathlib import Path
 
 class ImportSongHandler:
-    def __init__(self, ui, library):
+    def __init__(self, ui, library_repository):
         self.ui = ui
-        self.library = library
+        self.library_repository = library_repository
 
         ui.clicked.connect(self.on_import_song_button_clicked)
 
@@ -25,6 +25,6 @@ class ImportSongHandler:
                 new_file_path = Path(MUSIC_FOLDER) / Path(file_path).name
                 shutil.copy2(file_path, new_file_path)
                 new_song = MetadataParser.song_from_file(new_file_path)
-                self.library.add_song(new_song)
+                self.library_repository.add_song(new_song)
             
 

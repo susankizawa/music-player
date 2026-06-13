@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTableWidget, QLabel
 
 class MainWindow(QMainWindow):
-    def __init__(self, library, audio_handler):
+    def __init__(self, library_repository, audio_handler):
         super().__init__()
 
         self.setWindowTitle("Tocador de Música")
@@ -25,11 +25,11 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.open_music_folder_button, alignment=Qt.AlignLeft)
 
         self.import_song_button = ImportSongButton()
-        self.import_song_handler = ImportSongHandler(self.import_song_button, library)
+        self.import_song_handler = ImportSongHandler(self.import_song_button, library_repository)
         layout.addWidget(self.import_song_button, alignment=Qt.AlignLeft)
         
-        self.library_table_view = LibraryTableView(library)
-        self.library_table_handler = LibraryTableHandler(self.library_table_view, audio_handler)
+        self.library_table_view = LibraryTableView(library_repository.get_all_songs())
+        self.library_table_handler = LibraryTableHandler(self.library_table_view, audio_handler, library_repository)
         layout.addWidget(self.library_table_view)
 
         self.player_bar = PlayerBar(audio_handler)

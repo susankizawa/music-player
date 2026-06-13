@@ -3,18 +3,15 @@ from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
 from src.utils.time import format_time
 
 class LibraryTableModel(QAbstractTableModel):
-    def __init__(self, library):
+    def __init__(self, data):
         super().__init__()
 
-        self._library = library
-        self._data = self._library.songs
+        self._data = data
         self._column_config = [
             {"header": "title", "attr": "title"},
             {"header": "artist", "attr": "artist"},
             {"header": "duration", "attr": "duration"},
         ]
-
-        self._library.songsChanged.connect(self.on_data_changed)
     
     def rowCount(self, parent=QModelIndex()):
         return len(self._data)
@@ -47,6 +44,6 @@ class LibraryTableModel(QAbstractTableModel):
             return self._column_config[section]["header"]
         return None
     
-    def on_data_changed(self):
-        self._data = self._library.songs
+    def update_data(self, data):
+        self._data = data
         self.layoutChanged.emit()

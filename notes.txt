@@ -184,3 +184,6 @@ logic for loading songs:
 notes:
 - music player stops when music reaches the end, music doesn't start when switching music
 - maybe consider using a local database?
+
+more notes:
+- make it so volume slider goes to 0 when muted and goes back to the original value when unmuted
