@@ -1,5 +1,5 @@
 from src.shared.constants import MUSIC_FOLDER
-from src.features.file_handler.metadata_parser import MetadataParser
+from src.core.metadata_parser import MetadataParser
 
 from PySide6.QtWidgets import QFileDialog
 import shutil

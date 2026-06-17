@@ -187,3 +187,15 @@ notes:
 
 more notes:
 - make it so volume slider goes to 0 when muted and goes back to the original value when unmuted
+- sort out where the thread code needs to go
+
+backlog:
+- soft removing files ok
+- hard removing files
+- search bar
+- database + repositories (mostly done, still needs search/filter queries)
+- playlist manager
+- play history (from your notes)
+- skip/previous (needs playlist)
+- shuffle/autoplay config
+- mute restores original volume (from your notes)

@@ -198,4 +198,7 @@ pyrightconfig.json
 VERTICAL_SLICE_PLACEHOLDERS.md
 WORKLOG.md
 
+*.db
+*.json
+
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode

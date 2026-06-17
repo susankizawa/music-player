@@ -3,10 +3,10 @@ from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
 from src.utils.time import format_time
 
 class LibraryTableModel(QAbstractTableModel):
-    def __init__(self, data):
+    def __init__(self):
         super().__init__()
 
-        self._data = data
+        self._data = []
         self._column_config = [
             {"header": "title", "attr": "title"},
             {"header": "artist", "attr": "artist"},
@@ -39,7 +39,6 @@ class LibraryTableModel(QAbstractTableModel):
         return self._data[row]
     
     def headerData(self, section, orientation, role=Qt.DisplayRole):
-        # Sets the text for horizontal headers
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
             return self._column_config[section]["header"]
         return None

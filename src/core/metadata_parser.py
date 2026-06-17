@@ -3,7 +3,7 @@ from pathlib import Path
 from mutagen import MutagenError, File
 from mutagen.easyid3 import EasyID3
 
-from src.features.file_handler.exceptions import CorruptedFileError, UnsupportedFileTypeError
+from src.core.exceptions import CorruptedFileError, UnsupportedFileTypeError
 from src.shared.constants import ROOT
 from src.shared.song import Song
 

@@ -7,12 +7,16 @@ from src.features.library_manager.library_table.library_table_handler import Lib
 from src.features.library_manager.library_table.library_table_view import LibraryTableView
 from src.features.music_player.player_bar import PlayerBar
 
+from src.core.session_manager import SessionManager
+from src.core.config_manager import ConfigManager
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTableWidget, QLabel
 
 class MainWindow(QMainWindow):
     def __init__(self, library_repository, audio_handler):
         super().__init__()
+        self.audio_handler = audio_handler
 
         self.setWindowTitle("Tocador de Música")
         self.setGeometry(100, 100, 800, 600)
@@ -28,8 +32,10 @@ class MainWindow(QMainWindow):
         self.import_song_handler = ImportSongHandler(self.import_song_button, library_repository)
         layout.addWidget(self.import_song_button, alignment=Qt.AlignLeft)
         
-        self.library_table_view = LibraryTableView(library_repository.get_all_songs())
-        self.library_table_handler = LibraryTableHandler(self.library_table_view, audio_handler, library_repository)
+        self.library_table_view = LibraryTableView()
+        self.library_table_handler = LibraryTableHandler(self.library_table_view, library_repository)
+        self.library_table_handler.library_initialized.connect(self.load_first_song)
+        self.library_table_handler.song_requested.connect(audio_handler.play_song)
         layout.addWidget(self.library_table_view)
 
         self.player_bar = PlayerBar(audio_handler)
@@ -37,3 +43,27 @@ class MainWindow(QMainWindow):
                          stretch=0)
 
         self.setCentralWidget(central_widget)
+    
+    def load_first_song(self, songs):
+        if songs:
+            session_manager = SessionManager()
+            session = session_manager.load()
+            first_song_file_path = session.get("current_song")
+            position = session.get("position", 0)
+            print(position)
+            if first_song_file_path:
+                first_song = next((s for s in songs if s.file_path == first_song_file_path), None)
+            else:
+                first_song = songs[0]
+            self.audio_handler.load_song(first_song)
+            self.audio_handler.play()
+    
+    def closeEvent(self, event):
+        session_manager = SessionManager()
+
+        session_manager.update({
+            "current_song": self.audio_handler.current_song.file_path
+        })
+        session_manager.save()
+
+        event.accept()
