@@ -1,3 +1,5 @@
+from src.features.library_manager.search.search_handler import SearchHandler
+from src.features.library_manager.search.search_bar import SearchBar
 from src.features.file_handler.import_song.import_song_button import ImportSongButton
 from src.features.file_handler.import_song.import_song_handler import ImportSongHandler
 from src.features.file_handler.open_music_folder.open_music_folder_button import OpenMusicFolderButton
@@ -11,7 +13,7 @@ from src.core.session_manager import SessionManager
 from src.core.config_manager import ConfigManager
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTableWidget, QLabel
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QLabel
 
 class MainWindow(QMainWindow):
     def __init__(self, library_repository, audio_handler):
@@ -24,21 +26,38 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         layout = QVBoxLayout(central_widget)
 
+        self.inner_container1 = QWidget()
+        inner_layout1 = QHBoxLayout(self.inner_container1)
+        inner_layout1.setContentsMargins(0,0,0,0)
+        layout.addWidget(self.inner_container1)
+
+        inner_layout1.addStretch()
+
         self.open_music_folder_button = OpenMusicFolderButton()
         self.open_music_folder_handler = OpenMusicFolderHandler(self.open_music_folder_button)
-        layout.addWidget(self.open_music_folder_button, alignment=Qt.AlignLeft)
+        inner_layout1.addWidget(self.open_music_folder_button, alignment=Qt.AlignLeft)
 
         self.import_song_button = ImportSongButton()
         self.import_song_handler = ImportSongHandler(self.import_song_button, library_repository)
-        layout.addWidget(self.import_song_button, alignment=Qt.AlignLeft)
+        inner_layout1.addWidget(self.import_song_button, alignment=Qt.AlignLeft)
         
+        layout.addSpacing(10)
+
+        self.search_bar = SearchBar()
+        self.search_handler = SearchHandler(self.search_bar)
+        layout.addWidget(self.search_bar)
+
+        layout.addSpacing(10)
+
         self.library_table_view = LibraryTableView()
         self.library_table_handler = LibraryTableHandler(self.library_table_view, library_repository)
         self.library_table_handler.library_initialized.connect(self.load_first_song)
         self.library_table_handler.song_requested.connect(audio_handler.play_song)
+        self.search_handler.search_requested.connect(self.library_table_handler.on_search_request)
         layout.addWidget(self.library_table_view)
 
         self.player_bar = PlayerBar(audio_handler)
+        self.player_bar.setContentsMargins(0,0,0,0)
         layout.addWidget(self.player_bar,
                          stretch=0)
 

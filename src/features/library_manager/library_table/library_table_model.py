@@ -44,5 +44,7 @@ class LibraryTableModel(QAbstractTableModel):
         return None
     
     def update_data(self, data):
+        self.beginResetModel()
         self._data = data
+        self.endResetModel()
         self.layoutChanged.emit()

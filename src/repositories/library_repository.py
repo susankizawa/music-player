@@ -71,3 +71,20 @@ class LibraryRepository(QObject):
         query.bindValue(":file_path", file_path)
         query.exec()
         self.songsChanged.emit()
+    
+    def filter_songs_by_title(self, filter):
+        query = QSqlQuery(self.db)
+        query.prepare("""
+            SELECT * FROM library WHERE LOWER(title) LIKE LOWER(:filter) AND deleted = 0
+        """)
+        query.bindValue(":filter", f"%{filter}%")
+
+        result = []
+
+        if not query.exec():
+            return []
+        
+        while query.next():
+            result.append(self._map_to_song(query))
+
+        return result

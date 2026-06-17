@@ -1,3 +1,5 @@
+from re import search
+
 from src.shared.song import Song
 from src.features.library_manager.library_table.library_table_model import LibraryTableModel
 from src.workers.background_task_builder import BackgroundTaskBuilder
@@ -46,6 +48,14 @@ class LibraryTableHandler(QObject):
         
         self._initialized = True
         self.library_initialized.emit(songs)
+    
+    def on_search_request(self, search_filter):
+        if not search_filter.strip():
+            songs = self.repository.get_all_songs()
+        else:
+            songs = self.repository.filter_songs_by_title(search_filter)
+
+        self.table_model.update_data(songs)
     
 
     
