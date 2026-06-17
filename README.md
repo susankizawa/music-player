@@ -125,14 +125,3 @@ src.main
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
-
----
-
-## Project Structure (expected)
-
-```
-src/
- ├── main.py   # Application entry point
-```
-
-```
