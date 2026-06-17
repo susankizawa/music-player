@@ -1,8 +1,5 @@
-from re import search
-
 from src.shared.song import Song
 from src.features.library_manager.library_table.library_table_model import LibraryTableModel
-from src.workers.background_task_builder import BackgroundTaskBuilder
 from src.workers.library_worker import LibraryWorker
 from src.workers.task_queue import TaskQueue
 

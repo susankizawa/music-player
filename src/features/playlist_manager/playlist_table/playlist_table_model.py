@@ -2,7 +2,7 @@ from PySide6.QtCore import QAbstractTableModel, Qt, QModelIndex
 
 from src.utils.time import format_time
 
-class LibraryTableModel(QAbstractTableModel):
+class PlaylistTableModel(QAbstractTableModel):
     def __init__(self):
         super().__init__()
 
@@ -10,8 +10,6 @@ class LibraryTableModel(QAbstractTableModel):
         self._column_config = [
             {"header": "title", "attr": "title"},
             {"header": "artist", "attr": "artist"},
-            {"header": "duration", "attr": "duration"},
-            {"header": "album", "attr": "album"},
         ]
     
     def rowCount(self, parent=QModelIndex()):
